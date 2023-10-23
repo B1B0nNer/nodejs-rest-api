@@ -1,6 +1,6 @@
 const httpError = require("../helpers/httpError.js");
 const Wrapper = require("../helpers/Wrapper.js");
-const { User } = require("../schemas/user-schema.js");
+const User = require("../service/user-schema.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
@@ -10,6 +10,7 @@ dotenv.config();
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
+  console.log("111");
   const {
     body: { email, password, subscription },
   } = req;
@@ -72,8 +73,7 @@ const getCurrentUser = (req, res) => {
 };
 
 const logout = async (req, res) => {
-  
-    const { user: { _id } } = req;
+  const { user: { _id } } = req;
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(204).send();
 };

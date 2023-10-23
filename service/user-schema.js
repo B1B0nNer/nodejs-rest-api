@@ -1,9 +1,9 @@
 const handleMongooseError = require("../helpers/handleMongooseError.js");
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
 const validSubscriptionOptions = ["starter", "pro", "business"];
 
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
     {
       password: {
         type: String,
@@ -42,9 +42,10 @@ const userSchema = new Schema(
       },
     },
     { versionKey: false, timestamps: true }
-  );
+);
   
-  userSchema.post("save", handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
-  
-module.exports = model("user", userSchema)
+const User = mongoose.model("user", userSchema);
+
+module.exports = User;
