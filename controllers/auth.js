@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const register = async (req, res) => {
   console.log("111");
@@ -67,13 +67,12 @@ const login = async (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  
-    const { user: { email, subscription } } = req;
+  const { body : { email, subscription } } = req;
   res.json({ email, subscription });
 };
 
 const logout = async (req, res) => {
-  const { user: { _id } } = req;
+  const { body : { _id } } = req;
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(204).send();
 };

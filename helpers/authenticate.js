@@ -1,28 +1,28 @@
-const jwt = require('jsonwebtoken');
-const httpError = require('../helpers/httpError.js');
-const { User } = require('../schemas/user-schema.js');
+const jwt = require("jsonwebtoken");
+const httpError = require("../helpers/httpError");
+const Wrapper = require("../helpers/Wrapper");
+const User = require("../service/user-schema");
 
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = process.env.SECRET_KEY;
 
-function authenticate(req, res, next) {
+const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
-    next(httpError(401, "Not authorized"));
+    throw httpError(401);
   }
+
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
-    User.findById(id, (err, user) => {
-      if (err || !user || !user.token || user.token !== token) {
-        next(httpError(401, "Not authorized"));
-      } else {
-        req.user = user;
-        next();
-      }
-    });
+    const user = await User.findById(id);
+    if (!user || !user.token) {
+      throw httpError(401);
+    }
+    req.user = user;
+    next();
   } catch (error) {
-    next(httpError(401, "Not authorized"));
+    next(httpError(401));
   }
-}
+};
 
-module.exports = authenticate;
+module.exports = Wrapper(authenticate);
