@@ -24,20 +24,9 @@ const loginSchema = Joi.object({
   }),
 });
 
-const updateSubscriptionSchema = Joi.object({
-  subscription: Joi.string()
-    .valid(...validSubscriptionOptions)
-    .default(validSubscriptionOptions[0])
-    .required()
-    .messages({
-      "any.only": `Subscription must be one of ${validSubscriptionOptions.join(", ")}.`,
-    }),
-});
-
 module.exports = {
   schemas: {
     registerSchema,
-    loginSchema,
-    updateSubscriptionSchema
+    loginSchema
   }
 };
