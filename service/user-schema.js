@@ -1,5 +1,5 @@
-const handleMongooseError = require("../helpers/handleMongooseError.js");
 const mongoose = require("mongoose");
+const { handleSaveError, runValidatorsAtUpdate } = require("./hooks.js");
 
 const validSubscriptionOptions = ["starter", "pro", "business"];
 
@@ -44,7 +44,9 @@ const userSchema = new mongoose.Schema(
     { versionKey: false, timestamps: true }
 );
   
-userSchema.post("save", handleMongooseError);
+userSchema.post("save", handleSaveError);
+userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+userSchema.post("findOneAndUpdate", handleSaveError)
 
 const User = mongoose.model("user", userSchema);
 
