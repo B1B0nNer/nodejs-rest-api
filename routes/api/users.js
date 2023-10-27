@@ -5,8 +5,6 @@ const validateBody = require("../../helpers/validateBody.js");
 const authenticate = require("../../middlewares/authenticate.js");
 const schemas = require("../../schemas/user-schema.js").schemas;
 
-
-
 const userRegisterValidate = validateBody(schemas.registerSchema);
 const userLoginValidate = validateBody(schemas.loginSchema);
 
