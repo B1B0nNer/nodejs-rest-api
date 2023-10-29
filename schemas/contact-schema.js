@@ -9,7 +9,8 @@ const contactsSchemas = Joi.object({
   }),
   phone: Joi.string().regex(/^[0-9+\-() ]+$/).required().messages({
     'string.pattern.base': "Номер телефону може містити лише числа, плюс, тире, дужки й пробліл"
-  })
+  }),
+  favorite: Joi.boolean().allow('')
 });
 
 const updateFavoriteSchema = Joi.object({

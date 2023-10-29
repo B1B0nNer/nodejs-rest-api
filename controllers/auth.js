@@ -10,7 +10,6 @@ dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const register = async (req, res) => {
-  console.log("111");
   const {
     body: { email, password, subscription },
   } = req;
@@ -55,8 +54,7 @@ const login = async (req, res) => {
   
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   await User.findByIdAndUpdate(user._id, { token });
-  
-  console.log(token, "token");
+
   const responseUser = {
     email: user.email,
     subscription: user.subscription,
@@ -73,7 +71,6 @@ const getCurrentUser = (req, res) => {
 };
 
 const logout = async (req, res) => {
-  console.log(req);
   const { body : { _id } } = req;
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(204).send();
