@@ -65,9 +65,30 @@ const login = async (req, res) => {
   });
 };
 
-const getCurrentUser = (req, res) => {
-  const { body : { email, subscription } } = req;
-  res.json({ email, subscription });
+const getCurrentUser = async (req, res) => {
+  const token = (req.headers.authorization).split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Authorization header is missing' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findById(decoded.id); // Предполагается, что у вас есть модель User
+
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+
+    res.json({
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
 };
 
 const logout = async (req, res) => {
