@@ -36,6 +36,9 @@ Please enter a valid password to proceed.
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String
+    }
   },
   { versionKey: false, timestamps: true }
 );
