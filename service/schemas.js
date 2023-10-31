@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const handleMongooseError = require("../../helpers/handleMongooseError");
+const { handleSaveError, runValidatorsAtUpdate } = require("./hooks.js");
 const Schema = mongoose.Schema;
 
 const contactSchema = new Schema({
@@ -19,6 +19,11 @@ const contactSchema = new Schema({
     favorite: {
         type: Boolean,
         default: false
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     }
 });
 
@@ -30,7 +35,9 @@ contactSchema.pre("save", function (next) {
   }
 });
 
-contactSchema.post("save", handleMongooseError);
+contactSchema.post("save", handleSaveError);
+contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+contactSchema.post("findOneAndUpdate", handleSaveError)
 
 const Contact = mongoose.model("contacts", contactSchema);
 

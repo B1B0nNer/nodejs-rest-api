@@ -9,11 +9,12 @@ const contactsSchemas = Joi.object({
   }),
   phone: Joi.string().regex(/^[0-9+\-() ]+$/).required().messages({
     'string.pattern.base': "Номер телефону може містити лише числа, плюс, тире, дужки й пробліл"
-  })
+  }),
+  favorite: Joi.boolean().allow('')
 });
 
-const updateStatusSchema = Joi.object({
+const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-module.exports = {contactsSchemas, updateStatusSchema};
+module.exports = {contactsSchemas, updateFavoriteSchema};
