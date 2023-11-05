@@ -8,7 +8,7 @@ const upload = require("../../middlewares/upload.js");
 
 const userRegisterValidate = validateBody(schemas.registerSchema);
 const userLoginValidate = validateBody(schemas.loginSchema);
-// const userEmailValidate = validateBody(schemas.emailSchema);
+const userEmailValidate = validateBody(schemas.emailSchema);
 
 const userAvatarUpload = upload.single("avatar")
 
@@ -16,7 +16,7 @@ router.post("/register", userRegisterValidate, auth.register);
 
 router.get("/verify/:verificationToken", auth.verifyEmail);
 
-router.post("/verify", auth.resendVerifyEmail);
+router.post("/verify", userEmailValidate, auth.resendVerifyEmail);
 
 router.post("/login", userLoginValidate, auth.login);
 

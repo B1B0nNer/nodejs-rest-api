@@ -20,7 +20,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const BASE_URL = process.env.BASE_URL;
 
 const register = async (req, res) => {
-  console.log(1);
+
   const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
   if (user) throw httpError(409, "Email in use");
@@ -38,7 +38,7 @@ const register = async (req, res) => {
     password: hashPassword,
     subscription,
     avatarURL,
-    verificationToken
+    verificationToken: verificationToken
   });
 
   console.log(newUser.verificationToken);
@@ -61,11 +61,15 @@ const register = async (req, res) => {
 const verifyEmail = async (req, res) => {
 
   const { verificationToken } = req.params;
-  console.log(verificationToken);
   const user = await User.findOne({ verificationToken });
+  
   if (!user) throw httpError(400, "Invalid verification code");
-
-  await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
+  
+  user.verify = true;
+  user.verificationToken = null;
+  
+  await user.save();
+  
   res.json({ message: "Email successfully verified" });
 };
 
@@ -73,6 +77,7 @@ const resendVerifyEmail = async (req, res) => {
 
   const { email } = req.body;
   const user = await User.findOne({ email });
+  
   if (!user) throw httpError(404, "User not found");
 
   if (user.verify) throw httpError(400, "Verification has already been passed");

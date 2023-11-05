@@ -45,8 +45,9 @@ Please enter a valid password to proceed.
     },
     verificationToken: {
       type: String,
-      default: null,
-      required: [true, "Verify token is required"],
+      required: function () {
+        return !this.verify; 
+      },
     },
   },
   { versionKey: false, timestamps: true }
