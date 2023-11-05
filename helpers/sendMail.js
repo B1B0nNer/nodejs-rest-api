@@ -11,7 +11,8 @@ if (!EMAIL || !PASS){
 }
 
 const transporter = nm.createTransport({
-    service: "Gmail",
+    host: 'smtp.ethereal.email',
+    port: 587,
     auth: {
         user: EMAIL,
         pass: PASS

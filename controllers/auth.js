@@ -41,6 +41,8 @@ const register = async (req, res) => {
     verificationToken
   });
 
+  console.log(newUser.verificationToken);
+
   const verifyEmail = {
     to: email,
     subject: "Verify your email",
@@ -59,6 +61,7 @@ const register = async (req, res) => {
 const verifyEmail = async (req, res) => {
 
   const { verificationToken } = req.params;
+  console.log(verificationToken);
   const user = await User.findOne({ verificationToken });
   if (!user) throw httpError(400, "Invalid verification code");
 
