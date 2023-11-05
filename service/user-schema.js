@@ -38,7 +38,16 @@ Please enter a valid password to proceed.
     },
     avatarURL: {
       type: String
-    }
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
